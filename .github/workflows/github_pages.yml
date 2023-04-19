@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # run on request (no need for PR)
   push:
     branches:
-      - releases/1.1.0
+      - temp_build_legacy_docs
 
 jobs:
   deploy:
@@ -48,7 +48,7 @@ jobs:
           pip install -r requirements.txt
           pip install 'click<8.1' git+https://github.com/pytorch-ignite/sphinxcontrib-versioning.git@a1a1a94ca80a0233f0df3eaf9876812484901e76
           pip install -e '.[default,tf,tfds]'
-          sphinx-versioning -l site/source/conf.py build -r develop -w develop site/source site/static/api
+          sphinx-versioning -l site/source/conf.py build -r v1.1.1 -w develop site/source site/static/api
           python site/build_docs.py
 
       - name: Deploy
@@ -56,4 +56,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          destination_dir: releases/1.1.0
           force_orphan: true
